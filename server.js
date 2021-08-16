@@ -2,6 +2,7 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const User = require("./models/user");
+const numCPUs = require("os").cpus().length;
 
 const passport = require("passport");
 const bcrypt = require("bCrypt");
@@ -262,6 +263,7 @@ app.get("/api/info", (req, res) => {
     path: `${process.cwd()}`,
     processId: `${process.pid}`,
     folder: `${process.cwd()}`,
+    numberProcess: numCPUs,
   };
 
   res.json(info);
