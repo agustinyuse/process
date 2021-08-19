@@ -30,9 +30,9 @@ app.use(
   })
 );
 
-const FACEBOOK_CLIENT_ID = process.argv[2] || process.env.FACEBOOK_CLIENT_ID;
+const FACEBOOK_CLIENT_ID = process.argv[3] || process.env.FACEBOOK_CLIENT_ID;
 const FACEBOOK_CLIENT_SECRET =
-  process.argv[3] || process.env.FACEBOOK_CLIENT_SECRET;
+  process.argv[4] || process.env.FACEBOOK_CLIENT_SECRET;
 
 passport.use(
   new FacebookStrategy(
@@ -254,9 +254,11 @@ app.post(
 );
 app.get("/failsignup");
 
+app.get("/info");
+
 app.get("/api/info", (req, res) => {
   const info = {
-    argv: `${process.argv[2]} / ${process.argv[3]}`,
+    argv: `${process.argv[2]}`,
     so: `${process.platform}`,
     version: `${process.version}`,
     memoryUsage: `${process.memoryUsage}`,
@@ -269,7 +271,7 @@ app.get("/api/info", (req, res) => {
   res.json(info);
 });
 
-app.get("/getUser", async (req, res) => {
+app.get("/api/user/getUser", async (req, res) => {
   const userDB = await User.findById(req.user.id);
 
   if (!userDB.photo) {
@@ -302,13 +304,13 @@ const messagesRouter = require("./routes/messages.routes");
 app.use("/api/mensajes", messagesRouter);
 
 const randomsRouter = require("./routes/randoms.routes");
-app.use("/api/random", randomsRouter);
+app.use("/random", randomsRouter);
 
 io.on("connect", (socket) => {
   console.log("usuario conectado");
 });
 
-const PORT = process.env.PORT || 8080;
+const PORT = parseInt(process.argv[2]) || 3000;
 
 controllersdb.conectarDB(process.env.MONGO_ATLAS, (err) => {
   if (err) return console.log("error en conexión de base de datos", err);

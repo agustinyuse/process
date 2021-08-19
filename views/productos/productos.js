@@ -31,7 +31,7 @@ const PROFILE = `
 </div>
 `;
 
-fetch("/getUser", {
+fetch("/api/user/getUser", {
   headers: {
     "Content-Type": "application/json",
   },

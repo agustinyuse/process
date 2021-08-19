@@ -1,12 +1,24 @@
-let numeros = {};
+function generador(param) {
+  let n = [];
+  let iteraciones = param;
 
-process.on("random", (quantity) => {
-  console.log(`mensaje del padre ${quantity}`);
-  for (let i = 0; i < 10000; i++) {
-    let numero = parseInt(Math.random() * 20) + 1;
-    if (!numeros[numero]) numeros[numero] = 0;
-    numeros[numero]++;
+  function number() {
+    return Math.floor(Math.random() * (1000 - 1) + 1);
+  }
+  for (let i = 0; i < iteraciones; i++) {
+    n.push(number());
   }
 
-  process.send(numeros);
+  let repetidos = n.reduce(
+    (acc, cur) => (acc[cur] ? (acc[cur] += 1) : (acc[cur] = 1), acc),
+    {}
+  );
+  //console.log(repetidos)
+  return repetidos;
+}
+
+process.on("random", (message) => {
+  let data = generador(message.number);
+  process.send(data);
+  process.exit();
 });
